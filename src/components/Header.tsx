@@ -6,6 +6,9 @@ import { cn } from "@/lib/utils";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
+import MonogramaBranco from "@/assets/MonogramaBranco.png";
+import MonogramaPreto from "@/assets/MonogramaPreto.png";
+
 const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -14,44 +17,38 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
 
-  const logoSrc =
-    theme === "dark"
-      ? "/src/assets/MonogramaBranco.png"
-      : "/src/assets/MonogramaPreto.png";
+  // CORREÇÃO DA LOGO DO NAVBAR
+  const logoSrc = theme === "dark" ? MonogramaBranco : MonogramaPreto;
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setIsScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   useEffect(() => {
     const sectionIds = ["#inicio", "#sobre", "#projetos", "#contato"];
-
-    const updateActiveSection = () => {
-      const viewportCenter = window.innerHeight / 2;
+    const update = () => {
+      const center = window.innerHeight / 2;
       let current = sectionIds[0];
 
       sectionIds.forEach((id) => {
-        const el = document.querySelector<HTMLElement>(id);
+        const el = document.querySelector(id);
         if (!el) return;
         const rect = el.getBoundingClientRect();
-        if (rect.top <= viewportCenter && rect.bottom >= viewportCenter) {
-          current = id;
-        }
+        if (rect.top <= center && rect.bottom >= center) current = id;
       });
 
       setActiveSection(current);
     };
 
-    updateActiveSection();
-    window.addEventListener("scroll", updateActiveSection);
-    window.addEventListener("resize", updateActiveSection);
+    update();
+    window.addEventListener("scroll", update);
+    window.addEventListener("resize", update);
+
     return () => {
-      window.removeEventListener("scroll", updateActiveSection);
-      window.removeEventListener("resize", updateActiveSection);
+      window.removeEventListener("scroll", update);
+      window.removeEventListener("resize", update);
     };
   }, []);
 
@@ -64,10 +61,8 @@ const Header = () => {
 
   const scrollToSection = (href: string) => {
     setIsMobileMenuOpen(false);
-    const element = document.querySelector(href);
-    if (element) {
-      element.scrollIntoView({ behavior: "smooth" });
-    }
+    const el = document.querySelector(href);
+    if (el) el.scrollIntoView({ behavior: "smooth" });
   };
 
   const handleLanguageChange = (lang: Language) => {
@@ -83,7 +78,6 @@ const Header = () => {
       )}
     >
       <nav className="container mx-auto px-4 py-2">
-        {/* linha única: logo | nav desktop | controles */}
         <div className="flex items-center justify-between gap-4">
           {/* Logo */}
           <div className="flex items-center gap-3">
@@ -95,15 +89,11 @@ const Header = () => {
               }}
               className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors"
             >
-              <img
-                src={logoSrc}
-                alt="Logo João Victor Alves"
-                className="h-8 w-auto"
-              />
+              <img src={logoSrc} alt="Logo João Victor Alves" className="h-8 w-auto" />
             </a>
           </div>
 
-          {/* Navegação centralizada (desktop) */}
+          {/* Menu desktop */}
           <div className="hidden md:flex flex-1 items-center justify-center gap-8">
             {navItems.map((item) => (
               <a
@@ -125,17 +115,15 @@ const Header = () => {
             ))}
           </div>
 
-          {/* Controles: tema, idioma, menu mobile */}
+          {/* Controles */}
           <div className="flex items-center gap-1">
-            {/* Tema */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:ring-primary"
+                  className="rounded-full text-foreground hover:bg-muted hover:text-primary"
                   onClick={toggleTheme}
-                  aria-label="Alternar tema"
                 >
                   {theme === "dark" ? <Sun size={32} /> : <Moon size={32} />}
                 </Button>
@@ -143,20 +131,18 @@ const Header = () => {
               <TooltipContent side="bottom">Alternar tema</TooltipContent>
             </Tooltip>
 
-            {/* Idioma */}
             <Tooltip>
               <TooltipTrigger asChild>
                 <div className="relative">
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:ring-primary"
+                    className="rounded-full text-foreground hover:bg-muted hover:text-primary"
                     onClick={() => setShowLang((v) => !v)}
-                    aria-label="Selecionar idioma"
-                    aria-expanded={showLang}
                   >
                     <Languages size={32} />
                   </Button>
+
                   {showLang && (
                     <div className="absolute right-0 mt-2 w-36 bg-card border border-border rounded shadow z-50">
                       {(["pt", "en"] as Language[]).map((lang) => (
@@ -183,9 +169,8 @@ const Header = () => {
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden text-foreground hover:bg-muted hover:text-primary focus-visible:ring-primary"
+              className="md:hidden hover:text-primary"
               onClick={() => setIsMobileMenuOpen((v) => !v)}
-              aria-label="Abrir menu"
             >
               {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
             </Button>
@@ -193,16 +178,14 @@ const Header = () => {
         </div>
       </nav>
 
-      {/* Drawer mobile vindo da direita */}
+      {/* Drawer Mobile */}
       {isMobileMenuOpen && (
         <div className="fixed inset-0 z-40 md:hidden">
-          {/* backdrop */}
           <button
             className="absolute inset-0 bg-black/40"
             onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="Fechar menu"
           />
-          {/* painel */}
+
           <div className="absolute right-0 top-0 h-full w-1/2 min-w-[230px] max-w-xs bg-background border-l border-border shadow-xl flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 border-b border-border">
               <span className="text-sm font-semibold text-muted-foreground">
@@ -211,9 +194,7 @@ const Header = () => {
               <Button
                 variant="ghost"
                 size="icon"
-                className="text-foreground hover:bg-muted hover:text-primary"
                 onClick={() => setIsMobileMenuOpen(false)}
-                aria-label="Fechar menu"
               >
                 <X size={22} />
               </Button>

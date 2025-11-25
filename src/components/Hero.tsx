@@ -4,11 +4,17 @@ import { useTheme } from "@/lib/theme";
 import { Button } from "./ui/button";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
+// IMPORTAÇÕES CORRETAS DAS LOGOS
+import MonogramaNomeBranco from "@/assets/MonogramaNomeBranco.png";
+import MonogramaNomePreto from "@/assets/MonogramaNomePreto.png";
+
 const Hero = () => {
   const { t } = useLanguage();
   const { theme } = useTheme();
   const isDark = theme === "dark";
-  const heroLogo = isDark ? "/src/assets/MonogramaNomeBranco.png" : "/src/assets/MonogramaNomePreto.png";
+
+  const heroLogo = isDark ? MonogramaNomeBranco : MonogramaNomePreto;
+
   const heroBackground = isDark
     ? "radial-gradient(ellipse 80% 60% at 60% 30%, rgba(120,0,255,0.22) 0%, transparent 80%), radial-gradient(ellipse 60% 40% at 30% 70%, rgba(0,160,255,0.22) 0%, transparent 80%), linear-gradient(135deg, #0c0f1d 0%, #0a0816 52%, #0b1224 100%)"
     : "radial-gradient(ellipse 80% 60% at 60% 30%, rgba(120,0,255,0.08) 0%, transparent 80%), radial-gradient(ellipse 60% 40% at 30% 70%, rgba(0,180,255,0.10) 0%, transparent 80%), linear-gradient(180deg, #ffffff 0%, #f8f7ff 100%)";
@@ -18,7 +24,6 @@ const Hero = () => {
       id="inicio"
       className="relative overflow-visible min-h-[90vh] flex items-center justify-center pt-24 px-2 sm:pt-28 sm:px-4 bg-background"
     >
-      {/* Background animado */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute inset-0 w-full h-full z-0 animate-hero-bg"
@@ -26,7 +31,6 @@ const Hero = () => {
       />
       <div className="container mx-auto max-w-3xl text-center relative z-10">
         <div className="animate-fade-up">
-          {/* Logo grande centralizado */}
           <div className="mb-8 flex justify-center">
             <img
               src={heroLogo}
@@ -36,7 +40,6 @@ const Hero = () => {
             />
           </div>
 
-          {/* Headline com textos adaptativos */}
           <div className="text-center mt-12 mb-8">
             <h2 className="font-black text-foreground leading-snug">
               <span className="block text-[clamp(1.5rem,3.6vw,2.3rem)]">
@@ -48,12 +51,10 @@ const Hero = () => {
             </h2>
           </div>
 
-          {/* Subtítulo */}
           <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
             {t.hero.description}
           </p>
 
-          {/* Botão de contato */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
             <Button
               size="lg"
@@ -64,12 +65,12 @@ const Hero = () => {
             </Button>
           </div>
 
-          {/* Localização e redes sociais */}
           <div className="flex flex-col items-center gap-2">
             <div className="flex items-center justify-center gap-2 text-muted-foreground text-base">
               <MapPin size={18} />
               <span>{t.hero.location}</span>
             </div>
+
             <div className="relative z-20 flex gap-3 mt-2 mb-2">
               <Tooltip>
                 <TooltipTrigger asChild>
@@ -85,6 +86,7 @@ const Hero = () => {
                 </TooltipTrigger>
                 <TooltipContent side="bottom">GitHub</TooltipContent>
               </Tooltip>
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <a
@@ -99,6 +101,7 @@ const Hero = () => {
                 </TooltipTrigger>
                 <TooltipContent side="bottom">LinkedIn</TooltipContent>
               </Tooltip>
+
               <Tooltip>
                 <TooltipTrigger asChild>
                   <a

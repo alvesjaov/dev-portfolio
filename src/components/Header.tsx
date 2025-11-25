@@ -17,7 +17,7 @@ const Header = () => {
   const { language, setLanguage, t } = useLanguage();
   const { theme, toggleTheme } = useTheme();
 
-  // CORREÇÃO DA LOGO DO NAVBAR
+  // Correcao da logo do navbar
   const logoSrc = theme === "dark" ? MonogramaBranco : MonogramaPreto;
 
   useEffect(() => {
@@ -59,8 +59,18 @@ const Header = () => {
     { label: t.nav.contact, href: "#contato" },
   ];
 
+  // Icon sizes
+  const iconSizeClasses = "h-7 w-7 md:h-6 md:w-6";
+  const buttonSizeClasses = "h-10 w-10 md:h-10 md:w-10";
+  const iconSizeOverride = "[&_svg]:h-6 [&_svg]:w-6 md:[&_svg]:h-6 md:[&_svg]:w-6";
+
+  const menuIconSizeClasses = "h-8 w-8 md:h-7 md:w-7";
+  const menuButtonSizeClasses = "h-10 w-10 md:h-10 md:w-10";
+  const menuIconOverride = "[&_svg]:h-6 [&_svg]:w-6 md:[&_svg]:h-7 md:[&_svg]:w-7";
+
   const scrollToSection = (href: string) => {
     setIsMobileMenuOpen(false);
+    setShowLang(false);
     const el = document.querySelector(href);
     if (el) el.scrollIntoView({ behavior: "smooth" });
   };
@@ -89,7 +99,7 @@ const Header = () => {
               }}
               className="flex items-center gap-2 text-xl font-bold text-foreground hover:text-primary transition-colors"
             >
-              <img src={logoSrc} alt="Logo João Victor Alves" className="h-8 w-auto" />
+              <img src={logoSrc} alt="Logo Joao Victor Alves" className="h-8 w-auto" />
             </a>
           </div>
 
@@ -116,63 +126,90 @@ const Header = () => {
           </div>
 
           {/* Controles */}
-          <div className="flex items-center gap-1">
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="rounded-full text-foreground hover:bg-muted hover:text-primary"
-                  onClick={toggleTheme}
-                >
-                  {theme === "dark" ? <Sun size={32} /> : <Moon size={32} />}
-                </Button>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">Alternar tema</TooltipContent>
-            </Tooltip>
-
-            <Tooltip>
-              <TooltipTrigger asChild>
-                <div className="relative">
+          <div className="flex items-center gap-0.5">
+            {/* Desktop only: tema e idioma */}
+            <div className="hidden md:flex items-center gap-1">
+              <Tooltip>
+                <TooltipTrigger asChild>
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="rounded-full text-foreground hover:bg-muted hover:text-primary"
-                    onClick={() => setShowLang((v) => !v)}
+                    className={cn(
+                      "rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:text-primary focus-visible:ring-0 focus-visible:ring-offset-0",
+                      buttonSizeClasses,
+                      iconSizeOverride
+                    )}
+                    onClick={toggleTheme}
                   >
-                    <Languages size={32} />
+                    {theme === "dark" ? (
+                      <Sun size={28} className={iconSizeClasses} />
+                    ) : (
+                      <Moon size={28} className={iconSizeClasses} />
+                    )}
                   </Button>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Alternar tema</TooltipContent>
+              </Tooltip>
 
-                  {showLang && (
-                    <div className="absolute right-0 mt-2 w-36 bg-card border border-border rounded shadow z-50">
-                      {(["pt", "en"] as Language[]).map((lang) => (
-                        <button
-                          key={lang}
-                          className={cn(
-                            "block w-full px-4 py-2 text-left text-sm transition-colors",
-                            lang === language
-                              ? "bg-primary/10 text-primary font-semibold"
-                              : "hover:bg-muted"
-                          )}
-                          onClick={() => handleLanguageChange(lang)}
-                        >
-                          {lang === "pt" ? "Português" : "English"}
-                        </button>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              </TooltipTrigger>
-              <TooltipContent side="bottom">Selecionar idioma</TooltipContent>
-            </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="relative">
+                    <Button
+                      variant="ghost"
+                      size="icon"
+                      className={cn(
+                        "rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:text-primary focus-visible:ring-0 focus-visible:ring-offset-0",
+                        buttonSizeClasses,
+                        iconSizeOverride
+                      )}
+                      onClick={() => setShowLang((v) => !v)}
+                    >
+                      <Languages size={28} className={iconSizeClasses} />
+                    </Button>
 
+                    {showLang && (
+                      <div className="absolute right-0 mt-2 w-36 bg-card border border-border rounded shadow z-50">
+                        {(["pt", "en"] as Language[]).map((lang) => (
+                          <button
+                            key={lang}
+                            className={cn(
+                              "block w-full px-4 py-2 text-left text-sm transition-colors",
+                              lang === language
+                                ? "bg-primary/10 text-primary font-semibold"
+                                : "hover:bg-muted"
+                            )}
+                            onClick={() => handleLanguageChange(lang)}
+                          >
+                            {lang === "pt" ? "Português" : "English"}
+                          </button>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Selecionar idioma</TooltipContent>
+              </Tooltip>
+            </div>
+
+            {/* Botao menu - sempre visivel no mobile */}
             <Button
               variant="ghost"
               size="icon"
-              className="md:hidden hover:text-primary"
-              onClick={() => setIsMobileMenuOpen((v) => !v)}
+              className={cn(
+                "md:hidden rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:text-primary focus-visible:ring-0 focus-visible:ring-offset-0",
+                menuButtonSizeClasses,
+                menuIconOverride
+              )}
+              onClick={() => {
+                setShowLang(false);
+                setIsMobileMenuOpen((v) => !v);
+              }}
             >
-              {isMobileMenuOpen ? <X size={32} /> : <Menu size={32} />}
+              {isMobileMenuOpen ? (
+                <X size={32} className={menuIconSizeClasses} />
+              ) : (
+                <Menu size={32} className={menuIconSizeClasses} />
+              )}
             </Button>
           </div>
         </div>
@@ -194,9 +231,14 @@ const Header = () => {
               <Button
                 variant="ghost"
                 size="icon"
+                className={cn(
+                  "rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:text-primary focus-visible:ring-0 focus-visible:ring-offset-0",
+                  menuButtonSizeClasses,
+                  menuIconOverride
+                )}
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                <X size={22} />
+                <X size={32} className={menuIconSizeClasses} />
               </Button>
             </div>
 
@@ -216,6 +258,66 @@ const Header = () => {
                 </button>
               ))}
             </nav>
+
+            {/* Rodapé com Tema (ícone) e Idioma (select) empilhados */}
+            <div className="mt-auto border-t border-border px-3 py-3 flex flex-col gap-3">
+              {/* Tema com nome e ícone à direita */}
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-semibold text-foreground">
+                  {theme === "dark" ? t.theme.dark : t.theme.light}
+                </span>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className={cn(
+                    "rounded-full text-foreground hover:bg-muted hover:text-primary focus-visible:bg-muted focus-visible:text-primary focus-visible:ring-0 focus-visible:ring-offset-0",
+                    buttonSizeClasses,
+                    iconSizeOverride
+                  )}
+                  onClick={toggleTheme}
+                  aria-label={language === "pt" ? "Alternar tema" : "Toggle theme"}
+                >
+                  {theme === "dark" ? (
+                    <Sun size={24} className={iconSizeClasses} />
+                  ) : (
+                    <Moon size={24} className={iconSizeClasses} />
+                  )}
+                </Button>
+              </div>
+
+              {/* Idioma - botões ao lado do nome, alinhados à direita */}
+              <div className="flex items-center justify-between gap-2">
+                <span className="text-sm font-semibold text-foreground">
+                  {t.languageLabel}
+                </span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => handleLanguageChange("pt")}
+                    className={cn(
+                      "h-9 w-9 flex items-center justify-center rounded-full text-l border border-border transition-colors",
+                      language === "pt"
+                        ? "bg-primary text-primary-foreground border-primary shadow"
+                        : "bg-background text-foreground hover:bg-muted"
+                    )}
+                    aria-label="Português"
+                  >
+                    PT
+                  </button>
+                  <button
+                    onClick={() => handleLanguageChange("en")}
+                    className={cn(
+                      "h-9 w-9 flex items-center justify-center rounded-full text-l border border-border transition-colors",
+                      language === "en"
+                        ? "bg-primary text-primary-foreground border-primary shadow"
+                        : "bg-background text-foreground hover:bg-muted"
+                    )}
+                    aria-label="English"
+                  >
+                    EN
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       )}

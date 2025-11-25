@@ -41,6 +41,11 @@ type ContactTranslations = {
 
 type Translations = {
   languageName: string;
+  theme: {
+    light: string;
+    dark: string;
+  };
+  languageLabel: string;
   nav: NavTranslations;
   hero: {
     headline: string;
@@ -58,6 +63,11 @@ type Translations = {
   projects: {
     title: string;
     subtitle: string;
+    placeholderTitle: string;
+    placeholderDescription: string;
+    placeholderStatus: string;
+    placeholderNote: string;
+    placeholderCta: string;
     codeCta: string;
     demoCta: string;
     items: Project[];
@@ -71,6 +81,11 @@ type Translations = {
 export const translations: Record<Language, Translations> = {
   pt: {
     languageName: "Português",
+    theme: {
+      light: "Modo Claro",
+      dark: "Modo Escuro",
+    },
+    languageLabel: "Idioma",
     nav: {
       home: "Início",
       about: "Sobre mim",
@@ -123,6 +138,11 @@ export const translations: Record<Language, Translations> = {
     projects: {
       title: "Projetos",
       subtitle: "Alguns dos meus trabalhos recentes",
+      placeholderTitle: "Seção em construção",
+      placeholderDescription: "Estou atualizando esta seção com novos projetos. Volte em breve ou fale comigo para ver trabalhos recentes.",
+      placeholderStatus: "Atualizando portfólio",
+      placeholderNote: "Enquanto atualizo, os cases ficam offline. Se quiser ver algo específico, me chama e eu envio.",
+      placeholderCta: "Falar sobre um projeto",
       codeCta: "Código",
       demoCta: "Demo",
       items: [
@@ -151,8 +171,7 @@ export const translations: Record<Language, Translations> = {
           demo: "#",
         },
       ],
-    },
-    contact: {
+    },    contact: {
       title: "Contato",
       subtitle: "Tem um projeto em mente? Me chama e vamos conversar.",
       email: {
@@ -174,6 +193,11 @@ export const translations: Record<Language, Translations> = {
   },
   en: {
     languageName: "English",
+    theme: {
+      light: "Light Mode",
+      dark: "Dark Mode",
+    },
+    languageLabel: "Language",
     nav: {
       home: "Home",
       about: "About me",
@@ -226,6 +250,11 @@ export const translations: Record<Language, Translations> = {
     projects: {
       title: "Projects",
       subtitle: "Some of my recent work",
+      placeholderTitle: "Work in progress",
+      placeholderDescription: "I'm updating this section with new projects. Check back soon or reach out to see recent work.",
+      placeholderStatus: "Refreshing portfolio",
+      placeholderNote: "While I update, case studies stay offline. If you want to see something specific, ping me and I'll send it.",
+      placeholderCta: "Talk about a project",
       codeCta: "Code",
       demoCta: "Demo",
       items: [
@@ -254,8 +283,7 @@ export const translations: Record<Language, Translations> = {
           demo: "#",
         },
       ],
-    },
-    contact: {
+    },    contact: {
       title: "Contact",
       subtitle: "Got a project in mind? Reach out and let's talk.",
       email: {

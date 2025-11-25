@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from "react";
+import { createContext, useContext, useLayoutEffect, useMemo, useState, type ReactNode } from "react";
 
 export type Theme = "light" | "dark";
 
@@ -12,23 +12,30 @@ const ThemeContext = createContext<ThemeContextValue | null>(null);
 
 const getPreferredTheme = (): Theme => {
   if (typeof window === "undefined") return "light";
-  const stored = localStorage.getItem("theme");
-  if (stored === "light" || stored === "dark") return stored;
+
+  try {
+    const stored = localStorage.getItem("theme");
+    if (stored === "light" || stored === "dark") return stored;
+  } catch {
+    // If localStorage is unavailable, fall back to system preference.
+  }
+
   return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
 };
 
 export const ThemeProvider = ({ children }: { children: ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>("light");
+  const [theme, setTheme] = useState<Theme>(() => getPreferredTheme());
 
-  useEffect(() => {
-    setTheme(getPreferredTheme());
-  }, []);
-
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (typeof document === "undefined") return;
     const root = document.documentElement;
     root.classList.toggle("dark", theme === "dark");
-    localStorage.setItem("theme", theme);
+
+    try {
+      localStorage.setItem("theme", theme);
+    } catch {
+      // Ignore write failures (e.g., in private mode).
+    }
   }, [theme]);
 
   const value = useMemo(

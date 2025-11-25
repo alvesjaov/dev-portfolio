@@ -1,17 +1,14 @@
+import { useLanguage } from "@/lib/i18n";
+
 const Footer = () => {
-  const currentYear = new Date().getFullYear();
+  const { t } = useLanguage();
+  const currentYear = new Date().getFullYear().toString();
 
   return (
     <footer className="py-8 px-4 border-t border-border">
       <div className="container mx-auto max-w-6xl">
-        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-muted-foreground">
-            © {currentYear} João Victor Alves. Todos os direitos reservados.
-          </p>
-          
-          <p className="text-sm text-muted-foreground">
-            Desenvolvido com ❤️ usando React & TypeScript
-          </p>
+        <div className="text-center justify-between gap-4">
+          <p className="text-sm text-muted-foreground">{t.footer.text.replace("{year}", currentYear)}</p>
         </div>
       </div>
     </footer>

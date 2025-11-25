@@ -1,77 +1,118 @@
-import { Github, Linkedin, Instagram, MapPin } from "lucide-react";
+import { Github, Instagram, Linkedin, MapPin } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
+import { useTheme } from "@/lib/theme";
 import { Button } from "./ui/button";
+import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
 const Hero = () => {
-  const technologies = [
-    { name: "HTML5", icon: "🌐" },
-    { name: "CSS3", icon: "🎨" },
-    { name: "JavaScript", icon: "⚡" },
-    { name: "React", icon: "⚛️" },
-    { name: "TypeScript", icon: "📘" },
-    { name: "Node.js", icon: "🟢" },
-  ];
-
-  const socialLinks = [
-    { icon: Github, href: "https://github.com/alvesjaov", label: "GitHub" },
-    { icon: Linkedin, href: "https://linkedin.com/in/alvesjaov", label: "LinkedIn" },
-    { icon: Instagram, href: "https://instagram.com/alvesjaov", label: "Instagram" },
-  ];
+  const { t } = useLanguage();
+  const { theme } = useTheme();
+  const isDark = theme === "dark";
+  const heroLogo = isDark ? "/src/assets/MonogramaNomeBranco.png" : "/src/assets/MonogramaNomePreto.png";
+  const heroBackground = isDark
+    ? "radial-gradient(ellipse 80% 60% at 60% 30%, rgba(120,0,255,0.22) 0%, transparent 80%), radial-gradient(ellipse 60% 40% at 30% 70%, rgba(0,160,255,0.22) 0%, transparent 80%), linear-gradient(135deg, #0c0f1d 0%, #0a0816 52%, #0b1224 100%)"
+    : "radial-gradient(ellipse 80% 60% at 60% 30%, rgba(120,0,255,0.08) 0%, transparent 80%), radial-gradient(ellipse 60% 40% at 30% 70%, rgba(0,180,255,0.10) 0%, transparent 80%), linear-gradient(180deg, #ffffff 0%, #f8f7ff 100%)";
 
   return (
-    <section id="inicio" className="min-h-screen flex items-center justify-center pt-20 px-4">
-      <div className="container mx-auto max-w-4xl text-center">
+    <section
+      id="inicio"
+      className="relative overflow-visible min-h-[90vh] flex items-center justify-center pt-24 px-2 sm:pt-28 sm:px-4 bg-background"
+    >
+      {/* Background animado */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 w-full h-full z-0 animate-hero-bg"
+        style={{ background: heroBackground }}
+      />
+      <div className="container mx-auto max-w-3xl text-center relative z-10">
         <div className="animate-fade-up">
-          {/* Profile Image */}
-          <div className="mb-8 inline-block">
-            <div className="w-40 h-40 rounded-full bg-gradient-to-br from-primary to-accent p-1">
-              <div className="w-full h-full rounded-full bg-card flex items-center justify-center text-6xl">
-                👨‍💻
-              </div>
+          {/* Logo grande centralizado */}
+          <div className="mb-8 flex justify-center">
+            <img
+              src={heroLogo}
+              alt="Logo João Victor Alves"
+              className="h-24 w-auto drop-shadow-md"
+              draggable={false}
+            />
+          </div>
+
+          {/* Headline com textos adaptativos */}
+          <div className="text-center mt-12 mb-8">
+            <h2 className="font-black text-foreground leading-snug">
+              <span className="block text-[clamp(1.5rem,3.6vw,2.3rem)]">
+                {t.hero.headline}
+              </span>
+              <span className="block brand-gradient-text text-[clamp(1.4rem,3.4vw,2.2rem)]">
+                {t.hero.highlight}
+              </span>
+            </h2>
+          </div>
+
+          {/* Subtítulo */}
+          <p className="text-lg md:text-xl text-muted-foreground mb-8 max-w-2xl mx-auto">
+            {t.hero.description}
+          </p>
+
+          {/* Botão de contato */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
+            <Button
+              size="lg"
+              className="px-8 py-4 text-lg font-bold shadow-md bg-primary text-primary-foreground hover:bg-primary/90 transition-colors"
+              asChild
+            >
+              <a href="#contato">{t.hero.cta}</a>
+            </Button>
+          </div>
+
+          {/* Localização e redes sociais */}
+          <div className="flex flex-col items-center gap-2">
+            <div className="flex items-center justify-center gap-2 text-muted-foreground text-base">
+              <MapPin size={18} />
+              <span>{t.hero.location}</span>
             </div>
-          </div>
-
-          {/* Name and Title */}
-          <h1 className="text-4xl md:text-6xl font-bold mb-4 text-foreground">
-            João Victor Alves
-          </h1>
-          
-          <div className="flex items-center justify-center gap-2 text-muted-foreground mb-6">
-            <MapPin size={18} />
-            <span>Brumado, Bahia - Brasil</span>
-          </div>
-
-          {/* Social Links */}
-          <div className="flex items-center justify-center gap-4 mb-8">
-            {socialLinks.map((social) => (
-              <Button
-                key={social.label}
-                variant="outline"
-                size="icon"
-                className="rounded-full hover:bg-primary hover:text-primary-foreground hover:border-primary transition-all"
-                asChild
-              >
-                <a href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}>
-                  <social.icon size={20} />
-                </a>
-              </Button>
-            ))}
-          </div>
-
-          {/* Technologies */}
-          <div className="mt-12">
-            <p className="text-sm font-medium text-muted-foreground mb-6">Tecnologias</p>
-            <div className="flex flex-wrap items-center justify-center gap-6">
-              {technologies.map((tech) => (
-                <div
-                  key={tech.name}
-                  className="flex flex-col items-center gap-2 group cursor-default"
-                >
-                  <div className="text-4xl transform transition-transform group-hover:scale-110">
-                    {tech.icon}
-                  </div>
-                  <span className="text-xs text-muted-foreground">{tech.name}</span>
-                </div>
-              ))}
+            <div className="relative z-20 flex gap-3 mt-2 mb-2">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="https://github.com/alvesjaov"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="GitHub"
+                    className="hover:text-primary transition-colors"
+                  >
+                    <Github size={22} />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">GitHub</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="https://linkedin.com/in/alvesjaov"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="LinkedIn"
+                    className="hover:text-primary transition-colors"
+                  >
+                    <Linkedin size={22} />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">LinkedIn</TooltipContent>
+              </Tooltip>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <a
+                    href="https://instagram.com/alvesjaov.dev"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Instagram"
+                    className="hover:text-primary transition-colors"
+                  >
+                    <Instagram size={22} />
+                  </a>
+                </TooltipTrigger>
+                <TooltipContent side="bottom">Instagram</TooltipContent>
+              </Tooltip>
             </div>
           </div>
         </div>

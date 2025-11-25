@@ -1,41 +1,31 @@
-import { Mail, MapPin, Github, Linkedin, Instagram } from "lucide-react";
+"use client";
+
+import { Mail, Github, Linkedin, Instagram } from "lucide-react";
+import { SiWhatsapp } from "react-icons/si";
+import { useLanguage } from "@/lib/i18n";
 import { Button } from "./ui/button";
 import { Card } from "./ui/card";
 
 const Contact = () => {
-  const contactInfo = [
-    {
-      icon: Mail,
-      label: "Email",
-      value: "joaovictor@email.com",
-      href: "mailto:joaovictor@email.com",
-    },
-    {
-      icon: MapPin,
-      label: "Localização",
-      value: "Brumado, Bahia - Brasil",
-      href: "https://maps.app.goo.gl/dFtgyrxJ11iww1k69",
-    },
-  ];
+  const { t } = useLanguage();
+  const whatsappMessage = encodeURIComponent(t.contact.whatsapp.prefill);
+  const whatsappHref = `https://wa.me/5577998416546?text=${whatsappMessage}`;
 
   const socialLinks = [
     {
       icon: Github,
       label: "GitHub",
       href: "https://github.com/alvesjaov",
-      color: "hover:text-[#333]",
     },
     {
       icon: Linkedin,
       label: "LinkedIn",
       href: "https://linkedin.com/in/alvesjaov",
-      color: "hover:text-[#0077B5]",
     },
     {
       icon: Instagram,
       label: "Instagram",
-      href: "https://instagram.com/alvesjaov",
-      color: "hover:text-[#E4405F]",
+      href: "https://instagram.com/alvesjaov.dev",
     },
   ];
 
@@ -43,49 +33,53 @@ const Contact = () => {
     <section id="contato" className="py-20 px-4 bg-card">
       <div className="container mx-auto max-w-4xl">
         <div className="animate-fade-up">
-          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">Contato</h2>
-          <p className="text-muted-foreground mb-12 text-lg">
-            Vamos trabalhar juntos? Entre em contato!
-          </p>
+          <h2 className="text-3xl md:text-4xl font-bold mb-4 text-primary">{t.contact.title}</h2>
 
+          <p className="text-muted-foreground mb-12 text-lg">{t.contact.subtitle}</p>
+
+          {/* Cards de contato */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-            {contactInfo.map((item) => (
-              <Card key={item.label} className="p-6 hover:shadow-md transition-shadow">
-                <a
-                  href={item.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-start gap-4 group"
-                >
-                  <div className="p-3 bg-primary/10 rounded-lg text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-colors">
-                    <item.icon size={24} />
-                  </div>
-                  <div>
-                    <h3 className="font-semibold text-foreground mb-1">{item.label}</h3>
-                    <p className="text-muted-foreground">{item.value}</p>
-                  </div>
-                </a>
+            {/* EMAIL */}
+            <Card className="p-6 flex items-start gap-4 hover:shadow-md hover:border-primary/40 transition-all">
+              <div className="p-3 bg-primary/10 rounded-lg text-primary">
+                <Mail size={24} />
+              </div>
+              <div>
+                <h3 className="font-semibold text-foreground mb-1">{t.contact.email.label}</h3>
+                <p className="text-muted-foreground">{t.contact.email.address}</p>
+                <p className="text-xs text-muted-foreground mt-1">{t.contact.email.helper}</p>
+              </div>
+            </Card>
+
+            {/* WHATSAPP */}
+            <a href={whatsappHref} target="_blank" rel="noopener noreferrer" className="block">
+              <Card className="p-6 flex items-start gap-4 hover:shadow-md hover:border-green-500/40 transition-all cursor-pointer">
+                <div className="p-3 bg-green-500/10 rounded-lg text-green-600">
+                  <SiWhatsapp size={24} />
+                </div>
+                <div>
+                  <h3 className="font-semibold text-foreground mb-1">{t.contact.whatsapp.label}</h3>
+                  <p className="text-muted-foreground">{t.contact.whatsapp.number}</p>
+                  <p className="text-xs text-muted-foreground mt-1">{t.contact.whatsapp.helper}</p>
+                </div>
               </Card>
-            ))}
+            </a>
           </div>
 
+          {/* Redes Sociais */}
           <div className="text-center">
-            <p className="text-muted-foreground mb-6">Siga-me nas redes sociais</p>
-            <div className="flex justify-center gap-4">
+            <p className="text-muted-foreground mb-6">{t.contact.socialsPrompt}</p>
+
+            <div className="flex justify-center gap-4 flex-wrap">
               {socialLinks.map((social) => (
                 <Button
                   key={social.label}
                   variant="outline"
                   size="lg"
-                  className={`rounded-full ${social.color} transition-colors`}
+                  className="rounded-full border-border text-foreground hover:bg-primary hover:text-primary-foreground transition-colors min-w-[180px]"
                   asChild
                 >
-                  <a
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                  >
+                  <a href={social.href} target="_blank" rel="noopener noreferrer" aria-label={social.label}>
                     <social.icon size={20} className="mr-2" />
                     {social.label}
                   </a>
